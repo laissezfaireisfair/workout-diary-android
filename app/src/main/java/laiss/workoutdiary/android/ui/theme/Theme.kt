@@ -1,39 +1,51 @@
 package laiss.workoutdiary.android.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Crust,
-    secondary = Mantle,
-    tertiary = Surface0,
     background = Base,
+    onBackground = Text,
+
+    surface = Surface1,
+    surfaceVariant = Surface0,
+    surfaceTint = Surface0,
+    inverseSurface = Crust,
+    onSurface = Text,
+    onSurfaceVariant = Subtext0,
+    inverseOnSurface = Text,
+
+    primary = Peach,
+    primaryContainer = Rosewater,
+    inversePrimary = Rosewater,
+    onPrimary = Mantle,
+    onPrimaryContainer = Mantle,
+
+    secondary = Surface2,
+    secondaryContainer = Overlay2,
+    onSecondary = Text,
+    onSecondaryContainer = Crust,
+
+    tertiary = Yellow,
+    tertiaryContainer = Lavender,
+    onTertiary = Text,
+    onTertiaryContainer = Crust,
+
+    outline = Lavender,
+    outlineVariant = Overlay0,
+
+    scrim = MantleHalfOpacity,
+
     error = Red,
-    surface = Surface1
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Base,
-    secondary = Crust,
-    tertiary = Mantle
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    errorContainer = Pink,
+    onError = Text,
+    onErrorContainer = Mantle
 )
 
 @Composable
@@ -50,7 +62,7 @@ fun WorkoutDiaryAndroidTheme(
         }
 
         darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        else -> DarkColorScheme
     }
 
     MaterialTheme(
