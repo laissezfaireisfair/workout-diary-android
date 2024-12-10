@@ -14,6 +14,13 @@ private val DarkColorScheme = darkColorScheme(
     onBackground = Text,
 
     surface = Surface1,
+    surfaceBright = Surface2,
+    surfaceContainer = Surface1,
+    surfaceContainerHigh = Surface2,
+    surfaceContainerHighest = Surface2,
+    surfaceContainerLow = Surface0,
+    surfaceContainerLowest = Surface0,
+    surfaceDim = Surface0,
     surfaceVariant = Surface0,
     surfaceTint = Surface0,
     inverseSurface = Crust,
@@ -45,7 +52,7 @@ private val DarkColorScheme = darkColorScheme(
     error = Red,
     errorContainer = Pink,
     onError = Text,
-    onErrorContainer = Mantle
+    onErrorContainer = Mantle,
 )
 
 @Composable
