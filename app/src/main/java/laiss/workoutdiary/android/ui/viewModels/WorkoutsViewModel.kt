@@ -3,7 +3,6 @@ package laiss.workoutdiary.android.ui.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -21,10 +20,14 @@ data class WorkoutsScreenState(
 )
 
 class WorkoutsViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(WorkoutsScreenState(isLoading = true))
-    val uiState: StateFlow<WorkoutsScreenState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(WorkoutsScreenState())
+    val uiState = _uiState.asStateFlow()
 
-    fun launch() {
+    init {
+        refresh()
+    }
+
+    fun refresh() {
         viewModelScope.launch { loadWorkouts() }
     }
 
@@ -39,18 +42,13 @@ class WorkoutsViewModel : ViewModel() {
                     )
                 )
             ), Workout(
-                id = UUID.randomUUID(),
-                timestamp = Instant.now(),
-                exercises = listOf(
+                id = UUID.randomUUID(), timestamp = Instant.now(), exercises = listOf(
                     ExerciseWithApproaches(
                         id = UUID.randomUUID(),
                         name = "Push-ups",
                         countByApproach = listOf(15, 30, 20, 15)
-                    ),
-                    ExerciseWithDistance(
-                        id = UUID.randomUUID(),
-                        name = "Threadmill",
-                        distanceKm = 5.0
+                    ), ExerciseWithDistance(
+                        id = UUID.randomUUID(), name = "Threadmill", distanceKm = 5.0
                     )
                 )
             )
@@ -60,9 +58,10 @@ class WorkoutsViewModel : ViewModel() {
     }
 
     private suspend fun loadWorkouts() = try {
+        _uiState.update { WorkoutsScreenState(isLoading = true) }
         val workouts = DataService.getWorkouts()
-        _uiState.update { it.copy(isLoading = false, workouts = workouts) }
+        _uiState.update { WorkoutsScreenState(workouts = workouts) }
     } catch (exception: Exception) {
-        _uiState.update { it.copy(isLoading = false, error = exception.message) }
+        _uiState.update { WorkoutsScreenState(error = exception.message) }
     }
 }

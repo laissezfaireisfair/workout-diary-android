@@ -3,6 +3,7 @@ package laiss.workoutdiary.android.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,10 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -25,22 +29,15 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import laiss.workoutdiary.android.ui.viewModels.WorkoutsViewModel
-import java.time.ZoneId
+import laiss.workoutdiary.android.ui.viewModels.CreateWorkoutViewModel
 
 @Composable
-@Preview
-fun WorkoutsScreenPreview() = WorkoutsScreen(navHostController = rememberNavController(),
-    viewModel = viewModel<WorkoutsViewModel>().apply { setPreviewMode() })
-
-@Composable
-fun WorkoutsScreen(
-    navHostController: NavHostController,
-    viewModel: WorkoutsViewModel = viewModel(),
-    modifier: Modifier = Modifier
+fun CreateWorkoutScreen(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    viewModel: CreateWorkoutViewModel = viewModel()
 ) {
     val state = viewModel.uiState.collectAsState().value
-
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         when {
             state.isLoading -> Column(
@@ -60,36 +57,62 @@ fun WorkoutsScreen(
 
             else -> LazyColumn(
                 modifier = modifier,
-                horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 contentPadding = PaddingValues(16.dp),
             ) {
-                items(state.workouts) { workout ->
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        TextButton(onClick = {/*TODO: Open date picker*/ }) {
+                            Text(text = "10.9.2024", fontSize = 25.sp)
+                        }
+                        TextButton(onClick = {/*TODO: Open time picker*/ }) {
+                            Text(text = "13:37", fontSize = 25.sp)
+                        }
+                    }
+                }
+
+                items(state.exercises) { exercise ->
                     ElevatedCard() {
                         Column(
                             modifier = Modifier
                                 .padding(10.dp)
                                 .fillMaxWidth()
                         ) {
-                            val localTime = workout.timestamp.atZone(ZoneId.systemDefault())
-                            val dateText = with(localTime) { "$dayOfMonth.$monthValue.$year" }
-                            val timeText = with(localTime) { "$hour:$minute" }
-                            val exercisesText = workout.exercises.fold("") { a, e ->
-                                if (a.isEmpty()) e.name else "$a, ${e.name}"
-                            }
-                            Text(text = dateText, fontSize = 30.sp)
-                            Spacer(modifier = Modifier.height(2.dp))
-                            Text(text = timeText, fontSize = 20.sp)
+                            Text(text = exercise.name, fontSize = 25.sp)
                             Spacer(modifier = Modifier.height(7.dp))
                             Text(
-                                text = exercisesText,
+                                text = "yadayada",
                                 fontSize = 15.sp,
                                 overflow = TextOverflow.Ellipsis
                             )
                         }
                     }
                 }
+
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                        horizontalArrangement = Arrangement.SpaceAround,
+                    ) {
+                        OutlinedButton(onClick = {/*TODO: Cancel*/ }) {
+                            Text(text = "Cancel", fontSize = 20.sp)
+                        }
+                        Button(onClick = {/*TODO: Save*/ }) {
+                            Text(text = "  Save  ", fontSize = 20.sp)
+                        }
+                    }
+                }
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun CreateWorkoutScreenPreview() {
+    CreateWorkoutScreen(navController = rememberNavController(),
+        viewModel = viewModel<CreateWorkoutViewModel>().apply { setPreviewMode() })
 }
